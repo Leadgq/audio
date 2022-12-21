@@ -11,8 +11,10 @@ export default class audioCanvas {
     // 流文件
     private mediaStreamAudioSourceNode?: MediaStreamAudioSourceNode
     private ffSize: number = 512
+    protected audioEle?: HTMLAudioElement
 
     constructor(
+        public body = document.querySelector("body")!,
         public el = document.querySelector<HTMLCanvasElement>("#canvas")!,
         private app = el.getContext("2d")!,
         private width = el.width,
@@ -57,11 +59,17 @@ export default class audioCanvas {
     private createMusicSource(source: string) {
         if (this.isStart) return;
         this.isStart = true;
-        const audioEle = new Audio();
-        audioEle.src = source;
-        audioEle.autoplay = true;
-        audioEle.preload = 'auto';
-        this.createSource(audioEle);
+        if (!this.audioEle) this.audioEle = new Audio();
+        this.audioEle.src = source;
+        this.audioEle.autoplay = true;
+        this.audioEle.preload = 'auto';
+        this.audioEle.addEventListener("ended", () => {
+            this.isStart = false;
+            this.audioEle = undefined;
+            this.body.removeChild(this.audioEle!);
+        })
+        this.body.appendChild(this.audioEle);
+        this.createSource(this.audioEle);
     }
 
     private createMikeSource(mediaStream: MediaStream) {
@@ -115,7 +123,7 @@ export default class audioCanvas {
                 const barHeight = (this.dataArray[i] + 140) * 2;
                 const color = Math.floor(barHeight);
                 this.app.fillStyle = `rgb(${Math.abs(color + 100)}, ${color}, ${Math.abs(Math.random() * color)})`;
-                this.app.fillRect(posX, this.height - barHeight , barWidth, barHeight);
+                this.app.fillRect(posX, this.height - barHeight, barWidth, barHeight);
                 posX += barWidth + 1;
             }
         }
