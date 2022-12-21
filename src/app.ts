@@ -6,7 +6,9 @@ export default class audioCanvas {
     // 分析资源对象
     private analyserNode?: AnalyserNode
     private bufferLength?: number
+    // 上下文对象和canvas的上下文类似
     private audioCtx?: AudioContext
+    // 流文件
     private mediaStreamAudioSourceNode?: MediaStreamAudioSourceNode
     private ffSize: number = 512
 
@@ -88,7 +90,9 @@ export default class audioCanvas {
     private createAnalyser() {
         // 分析资源对象
         this.analyserNode = this.audioCtx!.createAnalyser();
+        // 样本窗口大小
         this.analyserNode.fftSize = this.ffSize;
+        // 等于样本窗口的一半
         this.bufferLength = this.analyserNode.frequencyBinCount;
         this.dataArray = new Float32Array(this.bufferLength);
     }
@@ -97,14 +101,11 @@ export default class audioCanvas {
     public renderAudio() {
         //准备好下次重绘
         requestAnimationFrame(this.renderAudio.bind(this));
-
         //获取实时的频谱信息
         this.analyserNode?.getFloatFrequencyData(this.dataArray!);
-
         //画一个黑色的背景
         this.app.fillStyle = 'rgb(0, 0, 0)';
         this.app.fillRect(0, 0, this.width, this.height);
-
         //绘制频谱
         const barWidth = (this.width / this.bufferLength!) * 3;
         let posX = 0;
