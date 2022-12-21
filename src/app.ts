@@ -65,6 +65,7 @@ export default class audioCanvas {
     }
 
     private createMikeSource(mediaStream: MediaStream) {
+        if (this.audioCtx) return;
         this.audioCtx = new AudioContext();
         this.mediaStreamAudioSourceNode = this.audioCtx.createMediaStreamSource(mediaStream);
         this.createAnalyser();
