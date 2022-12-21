@@ -115,7 +115,7 @@ export default class audioCanvas {
                 const barHeight = (this.dataArray[i] + 140) * 2;
                 const color = Math.floor(barHeight);
                 this.app.fillStyle = `rgb(${Math.abs(color + 100)}, ${color}, ${Math.abs(Math.random() * color)})`;
-                this.app.fillRect(posX, this.height - barHeight / 2, barWidth, barHeight / 2);
+                this.app.fillRect(posX, this.height - barHeight , barWidth, barHeight);
                 posX += barWidth + 1;
             }
         }
