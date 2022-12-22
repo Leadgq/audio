@@ -84,7 +84,6 @@ export default class audioCanvas {
     }
 
     private createSource(target: HTMLAudioElement) {
-        if (this.audioCtx) return;
         this.audioCtx = new AudioContext();
         // 要分析的资源
         this.audioSourceNode = this.audioCtx.createMediaElementSource(target);
